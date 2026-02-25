@@ -6,7 +6,7 @@
 #include <random>
 
 #include "ProductCategory.h"
-#include "../Utils/utils.h"
+#include "../Utils/Utils.h"
 
 long long randomID(){
     std::random_device rd;
@@ -50,11 +50,11 @@ class Product {
             category = static_cast<Category>(cat); 
         }
 
-        void updateProduct(std::optional<std::string> newProductName,std::optional<std::string> newProductDesc,auto& storage) noexcept{
-            if(newProductName.has_value() && newProductName.value() != productName){
+        void updateProduct(std::string newProductName,std::string newProductDesc,auto& storage) noexcept{
+            if(!newProductName.empty() != productName){
                 productName = newProductName.value();
             }
-            if (newProductDesc.has_value() && newProductDesc.value() != productDesc){
+            if (!newProductDesc.empty() != productDesc){
                 productDesc = newProductDesc.value();
             }
             
