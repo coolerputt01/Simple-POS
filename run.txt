@@ -1,1 +1,1 @@
-g++ main.cpp -IC:/sqlite -LC:/sqlite -lsqlite3 -IC:/Slint-cpp/include/slint -LC:/Slint-cpp/lib -lslint_cpp -o builds/main.exe -static-libstdc++ -std=c++20
+g++ main.cpp -IC:/sqlite -LC:/sqlite -lsqlite3 -IC:/Slint-cpp/include/slint -LC:/Slint-cpp/lib src/Hashlib/blowfish.cpp src/Hashlib/bcrypt.cpp -lslint_cpp -lbcrypt -o builds/main.exe -static-libstdc++ -std=c++20

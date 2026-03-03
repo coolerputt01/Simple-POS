@@ -7,6 +7,7 @@
 
 #include "ProductCategory.h"
 #include "../Utils/Utils.h"
+#include "../Orm/sqlite_orm.h"
 
 long long randomID(){
     std::random_device rd;
@@ -51,30 +52,41 @@ class Product {
         }
 
         void updateProduct(std::string newProductName,std::string newProductDesc,auto& storage) noexcept{
-            if(!newProductName.empty() != productName){
-                productName = newProductName.value();
+            if ((newProductName.empty() && newProductName != productName)||(newProductDesc.empty() && newProductDesc != productDesc)) {return;}
+            auto idCheck = storage.template get_pointer<Product>(this->id);
+            if(!idCheck){
+                std::cerr<<"Product ID does not exist please try again.\n";
+                return;
             }
-            if (!newProductDesc.empty() != productDesc){
-                productDesc = newProductDesc.value();
-            }
-            
+            productName = newProductName;
+            productDesc = newProductDesc;
             updatedAt = getCurrentTime();
             storage.replace(*this);
             std::cout<<"Product :"<<id<<" successfully updated!\n";
             
         }
-        // void deleteProduct(){
-        //     delete this;
-        //     std::cout<<"Product successfully deleted!";
-        // }
+        void deleteProduct(auto& storage){
+            storage.template remove<Product>(this->id);
+            std::cout<<"Product successfully deleted!\n";
+        }
         void createProduct(auto& storage) {
             try{
-                storage.replace(*this);
+                auto idCheck = storage.template get_pointer<Product>(this->id);
+                auto existingProduct = storage.select(&Product::productName,sqlite_orm::where(sqlite_orm::c(&Product::productName) == this->productName));
+                if(idCheck){
+                    std::cerr<<"Product ID already exists please try again.\n";
+                    return;
+                }
+                if (!existingProduct.empty()){
+                    std::cerr<<"Product doesn't exist.\n";
+                }
+                storage.insert(*this);
                 std::cout<<"Successfully added product to db!\n";
             }catch(const std::runtime_error &err){
                 std::cerr<< err.what()<<std::endl;
             }
         }
+
         long long int getID(){
             return id;
         }
