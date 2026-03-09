@@ -9,31 +9,29 @@
 #include "../Utils/Utils.h"
 #include "../Orm/sqlite_orm.h"
 
-long long randomID(){
-    std::random_device rd;
-    std::mt19937_64 gen(rd());
-    std::uniform_int_distribution<long long> dist(1'000'000'000'000'000LL);
-    return dist(gen);
-}
-
-
 class Product {
     public:
         std::string productName;
         std::string productDesc;
         std::string dateOfStock;
+        int price;
         std::string updatedAt;
         long long int id;
         Category category;
+        long long transactionID;
 
-        Product() = default;
-        Product(std::string pN,std::string pD,Category cat) : productName(pN),productDesc(pD),category(cat){          
+        Product() {
             id = randomID();
             dateOfStock = getCurrentTime();
-            updatedAt = "NIL";
+        }
+        Product(std::string pN,std::string pD,Category cat,int pr) : productName(pN),productDesc(pD),category(cat),price(pr){          
+            id = randomID();
+            dateOfStock = getCurrentTime();
+            updatedAt = "NULL";
+            transactionID = 0;
         };
         std::string getProduct(){
-            std::string text = "Product Name: " + productName + "\nProduct Description: " + productDesc + "\nStock Date: " + dateOfStock + '\n';
+            std::string text = "Product Name: " + productName + "\nProduct Description: " + productDesc + "\nPrice: " + std::to_string(price) + "\nStock Date: " + dateOfStock + '\n';
             return text;
         }
         Category getCategory() const {
@@ -89,6 +87,9 @@ class Product {
 
         long long int getID(){
             return id;
+        }
+        void updateTransactionID(long long id){
+            transactionID = id;
         }
 
         ~Product() = default;

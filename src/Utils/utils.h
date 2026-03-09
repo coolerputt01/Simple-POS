@@ -4,6 +4,13 @@
 #include <ctime>
 #include <string>
 
+long long randomID(){
+    std::random_device rd;
+    std::mt19937_64 gen(rd());
+    std::uniform_int_distribution<long long> dist(1'000'000'000'000'000LL);
+    return dist(gen);
+}
+
 std::string getCurrentTime(){
     time_t now = time(0);
     
