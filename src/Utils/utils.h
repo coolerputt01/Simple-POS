@@ -5,9 +5,12 @@
 #include <string>
 
 long long randomID(){
-    std::random_device rd;
-    std::mt19937_64 gen(rd());
-    std::uniform_int_distribution<long long> dist(1'000'000'000'000'000LL);
+    static std::random_device rd;
+    static std::mt19937_64 gen(rd());
+    static std::uniform_int_distribution<long long> dist(
+        1'000'000'000'000LL,
+        9'999'999'999'999LL
+    );
     return dist(gen);
 }
 

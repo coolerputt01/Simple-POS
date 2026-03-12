@@ -16,7 +16,6 @@ auto initStorage(){
         make_column("price",&Product::price),
         make_column("date_of_stock",&Product::dateOfStock),
         make_column("updated_at",&Product::updatedAt),
-        make_column("transaction_id",&Product::transactionID),
         make_column("category",&Product::getCategoryInt,&Product::setCategoryInt)
     ),make_table("users",
         make_column("id",&User::id,primary_key().autoincrement()),
@@ -26,9 +25,14 @@ auto initStorage(){
         make_column("last_login",&User::lastLogin),
         make_column("session",&User::getSessionInt,&User::setSessionInt)
     ),make_table("transactions",
-        make_column("id",&Transaction::id),
+        make_column("id",&Transaction::id,primary_key()),
         make_column("sum",&Transaction::total),
         make_column("date_of_transaction",&Transaction::dateOfTransaction)
+    ),make_table("transaction_item",
+        make_column("id",&TransactionItem::id,primary_key().autoincrement()),
+        make_column("transaction_id",&TransactionItem::transactionID),
+        make_column("product_id",&TransactionItem::productID),
+        make_column("quantity",&TransactionItem::quantity)
     ));
     return storage;
 }

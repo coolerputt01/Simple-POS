@@ -1,14 +1,64 @@
-export component HelloWorld inherits Window {
+component TextLabel inherits Text {
+    font-size: 18px;
+    font-weight: 600;
+    color: black;
+}
+
+component InputText inherits Rectangle {
     width: 400px;
-    height: 400px;
+    height: 40px;
 
-    // Declare an alias that exposes the label's text property to C++
-    in property my_label <=> label.text;
+    background: transparent;
 
-    label := Text {
-       y: parent.width / 2;
-       x: parent.x + 200px;
-       text: "Hello, world";
-       color: blue;
+    Rectangle {
+        y: parent.height - 35px;
+        width: parent.width;
+        height: 2px;
+        background: black;
+    }
+
+    TextInput {
+        x: 5px;
+        y: -12px;
+        width: parent.width - 10px;
+        height: parent.height;
+
+        font-size: 16px;
+        color: black;
+    }
+}
+
+export component Signup inherits Window {
+    width: 960px;
+    height: 600px;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        background: black;
+    }
+
+    Rectangle {
+        background: white;
+        width: 450px;
+        height: 300px;
+        border-radius: 8px;
+
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
+
+        VerticalLayout {
+            padding: 20px;
+            spacing: 10px;
+
+            TextLabel { text: "Username"; }
+            InputText {}
+
+            TextLabel { text: "E-mail"; }
+            InputText {}
+
+            TextLabel { text: "Password"; }
+            InputText { }
+        }
     }
 }

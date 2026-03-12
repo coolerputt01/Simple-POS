@@ -5,9 +5,17 @@
 #include "../Utils/Utils.h"
 #include "../Product/Product.hpp"
 
+struct TransactionItem {
+    unsigned int id;
+    long long transactionID;
+    long long productID;
+    unsigned int quantity;
+};
+
 class Transaction {
     public:
         std::vector<Product> products;
+        std::vector<TransactionItem> transactions;
         std::string dateOfTransaction;
         long long id;
         int total;
@@ -20,14 +28,14 @@ class Transaction {
             id = randomID();
             dateOfTransaction = getCurrentTime();
             for(auto p : prod){
-                p.updateTransactionID(id);
+                transactions.push_back({0,id,p.id,2});
                 products.push_back(p);
             }
         }
 
-        void append(Product& prod){
+        void append(Product& prod,unsigned int quan){
             products.push_back(prod);
-            prod.updateTransactionID(id);
+            transactions.push_back({0,id,prod.id,quan});
         }
         int sum(){
             return std::accumulate(products.begin(),products.end(),0,[](int sum,Product& p){
@@ -39,7 +47,10 @@ class Transaction {
         }
         void save(auto& storage){
             try{
-                storage.insert(*this);
+                for(auto& t : transactions){
+                    storage.replace(t);
+                }
+                storage.replace(*this);
                 std::cout<<"Transaction successfully added.\n";
 
             }catch(const std::runtime_error& err){

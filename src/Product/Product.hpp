@@ -18,7 +18,6 @@ class Product {
         std::string updatedAt;
         long long int id;
         Category category;
-        long long transactionID;
 
         Product() {
             id = randomID();
@@ -28,10 +27,9 @@ class Product {
             id = randomID();
             dateOfStock = getCurrentTime();
             updatedAt = "NULL";
-            transactionID = 0;
         };
         std::string getProduct(){
-            std::string text = "Product Name: " + productName + "\nProduct Description: " + productDesc + "\nPrice: " + std::to_string(price) + "\nStock Date: " + dateOfStock + '\n';
+            std::string text = "Product ID: " + std::to_string(id) + "\nProduct Name: " + productName + "\nProduct Description: " + productDesc + "\nPrice: " + std::to_string(price) + "\nStock Date: " + dateOfStock + '\n';
             return text;
         }
         Category getCategory() const {
@@ -76,9 +74,10 @@ class Product {
                     return;
                 }
                 if (!existingProduct.empty()){
-                    std::cerr<<"Product doesn't exist.\n";
+                    std::cerr<<"Product exists.\n";
+                    return;
                 }
-                storage.insert(*this);
+                storage.replace(*this);
                 std::cout<<"Successfully added product to db!\n";
             }catch(const std::runtime_error &err){
                 std::cerr<< err.what()<<std::endl;
@@ -87,9 +86,6 @@ class Product {
 
         long long int getID(){
             return id;
-        }
-        void updateTransactionID(long long id){
-            transactionID = id;
         }
 
         ~Product() = default;
