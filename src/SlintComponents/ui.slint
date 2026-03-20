@@ -1,10 +1,19 @@
+import { Button } from "std-widgets.slint";
+import { Toast } from "./Toast.slint";
+import "./fonts/Urbanist.ttf";
+import "./fonts/Urbanist-Black.ttf";
+import "./fonts/Urbanist-Bold.ttf";
+import "./fonts/Urbanist-SemiBold.ttf";
+import "./fonts/Urbanist-Medium.ttf";
+import "./fonts/Urbanist-Thin.ttf";
 component TextLabel inherits Text {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 500;
     color: black;
 }
 
 component InputText inherits Rectangle {
+    in-out property <string> text;
     width: 400px;
     height: 40px;
 
@@ -19,9 +28,10 @@ component InputText inherits Rectangle {
 
     TextInput {
         x: 5px;
-        y: -12px;
+        y: -14px;
         width: parent.width - 10px;
         height: parent.height;
+        text <=> root.text;
 
         font-size: 16px;
         color: black;
@@ -31,6 +41,16 @@ component InputText inherits Rectangle {
 export component Signup inherits Window {
     width: 960px;
     height: 600px;
+    default-font-family: "Urbanist";
+
+    callback signup(string,string,string);
+
+    in-out property <string> email;
+    in-out property <string> username;
+    in-out property <string> password;
+    in-out property <bool> showToast : false;
+    in-out property <string> toastContent;
+    in-out property <string> typeDecl;
 
     Rectangle {
         width: parent.width;
@@ -38,27 +58,49 @@ export component Signup inherits Window {
         background: black;
     }
 
+    Toast {
+        text <=> toastContent;
+        type <=> typeDecl;
+        show <=> showToast;
+    }
+
     Rectangle {
         background: white;
         width: 450px;
-        height: 300px;
-        border-radius: 8px;
+        height: 400px;
+        border-radius: 0px;
 
         x: (parent.width - self.width) / 2;
         y: (parent.height - self.height) / 2;
 
         VerticalLayout {
-            padding: 20px;
-            spacing: 10px;
+            padding: 23px;
+            spacing: 12px;
+
+            Text {
+                text:"Sign-Up";
+                font-size: 24px;
+                font-weight: 720;
+            }
 
             TextLabel { text: "Username"; }
-            InputText {}
+            InputText { text <=> root.username; }
 
             TextLabel { text: "E-mail"; }
-            InputText {}
+            InputText { text <=> root.email; }
 
             TextLabel { text: "Password"; }
-            InputText { }
+            InputText { text <=> root.password; }
+
+            Button {
+                text:"Signup";
+                accessible-role: AccessibleRole.none;
+                primary: true;
+
+                clicked => {
+                    root.signup(root.username, root.email, root.password);
+                }
+            }
         }
     }
 }

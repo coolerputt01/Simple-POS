@@ -25,4 +25,10 @@ std::string getCurrentTime(){
     return std::string(textBuffer);
 }
 
+void setToast(auto& signup,auto& textContent,auto& type){
+    signup->set_typeDecl(type);
+    signup->set_toastContent(textContent);
+    signup->set_showToast(true);
+}
+
 #endif

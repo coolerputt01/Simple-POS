@@ -61,7 +61,7 @@ class User{
             }
         }
         
-        void signup(auto& storage){
+        bool signup(auto& storage){
             std::string hashedPassword = bcrypt::generateHash(this->password);
             std::string original = this->password;
             
@@ -72,18 +72,20 @@ class User{
                 if(!existingUser.empty()){
                     std::cerr<<"Username already exists!\n";
                     this->password = original;
-                    return;
+                    return false;
                 }
                 if(this->password.length() <= 8){
                     std::cerr<<"Password is too short.(At least 8 characters.)\n";
-                    return;
+                    return false;
                 }
                 storage.insert(*this);
                 this->password = original;
                 std::cout<<"Successfully created user!\n";
+                return true;
             }catch(const std::runtime_error& err){
                 this->password = original;
                 std::cerr<< err.what()<<std::endl;
+                return false;
             }
         }
         

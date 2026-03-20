@@ -1,0 +1,63 @@
+export component Toast inherits Rectangle {
+    property <string> position;
+    in-out property <brush> color_rect;
+    in-out property <string> text;
+    in-out property <bool> show;
+    in-out property <string> type;
+
+    visible <=> show;
+    width: 260px;
+    height: 50px;
+    border-radius: 2px;
+    x:680px;
+    y:12px;
+    background: {
+        if (type == "success") {
+            return #2E7D32;
+        } else if (type == "error") {
+            return #D32F2F;
+        } else if (type == "warning") {
+            return #F57C00;
+        } else if (type == "info") {
+            return #1976D2;
+        } else {
+            return #125100;
+        }
+    }
+
+    Rectangle {
+        width: parent.width;
+        height: 4px;
+        y: 48px;
+        background: {
+            if (type == "success") {
+                return #4CAF50;  // Green
+            } else if (type == "error") {
+                return #F44336;  // Red
+            } else if (type == "warning") {
+                return #FF9800;  // Orange
+            } else if (type == "info") {
+                return #2196F3;  // Blue
+            } else {
+                return color_rect;  // Fallback to bound property
+            }
+        };
+        z: 1000;
+    }
+
+    Text {
+        x: 12px;
+        y: 14px;
+        font-size: 18px;
+
+        text <=> text;
+        color: white;
+    }
+
+    Image {
+        width: 16px;
+        height: 16px;
+        source: @image-url("./icons/cancel.svg");
+        x: parent.width - 38px;
+    }
+}

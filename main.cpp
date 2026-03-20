@@ -5,10 +5,29 @@
 #include "src/SlintComponents/ui.h"
 #include "src/Auth/User.hpp"
 #include "src/Transaction/Transaction.hpp"
+#include "src/Utils/Utils.h"
 
 
 int main(){
+    auto storage = initStorage();
+    storage.sync_schema();
     auto signup = Signup::create();
+
+    signup->on_signup([&storage,signup](slint::SharedString username, slint::SharedString email, slint::SharedString password){
+        if(std::string(username).empty() || std::string(password).empty() || std::string(email).empty()){
+            return;
+        }
+        User user = User(std::string(username), std::string(password), std::string(email));
+        bool userSignup = user.signup(storage);
+        if (userSignup){
+            setToast(signup,"User created successfully!","success");
+        }else {
+            setToast(signup,"Failed to create a user.","error");
+        }
+        signup->set_username("");
+        signup->set_email("");
+        signup->set_password("");
+    });
     signup->run();
     
     // Product product = Product("Papaya Soap","Face cleansing soap that works for all types of skin.",Category::FASHION,8000);
